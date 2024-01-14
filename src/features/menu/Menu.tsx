@@ -5,11 +5,11 @@ import MenuItem from "./MenuItem";
 function Menu() {
   const menu = useLoaderData() as Array<any>; // Temp
   return (
-    <div>
+    <ul className="divide-y divide-stone-200 px-3">
       {menu.map((pizza) => (
         <MenuItem key={pizza.id} pizza={pizza} />
       ))}
-    </div>
+    </ul>
   );
 }
 
