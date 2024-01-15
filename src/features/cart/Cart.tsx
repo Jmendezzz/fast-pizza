@@ -41,7 +41,7 @@ function Cart() {
 
       <div className='mt-10 space-x-2'>
         <Button type='primary' to="/order/new">Order pizzas</Button>
-        <button >Clear cart</button>
+        <Button type='secondary' >Clear cart</Button>
       </div>
     </div>
   );
