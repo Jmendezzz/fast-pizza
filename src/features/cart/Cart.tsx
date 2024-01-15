@@ -33,13 +33,13 @@ function Cart() {
     <div className='px-4 py-3'>
     <LinkButton to="/menu">Back to menu</LinkButton>
       <h2 className='mt-7 text-xl font-semibold'>Your cart, %NAME%</h2>
-      <ul>
+      <ul className='divide-y divide-stone-200 border-b mt-3'>
         {cart.map((item)=> (
           <CartItem item={item} key={item.pizzaId} />
         ))}
       </ul>
 
-      <div>
+      <div className='mt-10 space-x-2'>
         <Button type='primary' to="/order/new">Order pizzas</Button>
         <button >Clear cart</button>
       </div>
