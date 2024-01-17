@@ -35,3 +35,8 @@ const cartSlice = createSlice({
 export default cartSlice.reducer;
 
 export const {addItem,deleteItem,increaseItemQuantity,decreaseItemQuantity,clearCart} = cartSlice.actions;
+
+//Selectors to use with the hook useSelector.
+export const getCart = (store) => store.cart.cart;
+export const getTotalCartItems = (store) => store.cart.cart.reduce((total,item)=> item.quantity +  total,0);
+export const getTotalCartPrice = (store) => store.cart.cart.reduce((total,item)=> item.totalPrice +  total,0);

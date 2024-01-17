@@ -9,7 +9,7 @@ function MenuItem({ pizza }) {
   
   function addToCartHandler(){
     const newItem={
-      pizzaId: id,
+      id,
       name,
       quantity:1,
       unitPrice,
