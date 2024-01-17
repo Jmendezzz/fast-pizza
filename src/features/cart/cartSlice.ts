@@ -40,3 +40,4 @@ export const {addItem,deleteItem,increaseItemQuantity,decreaseItemQuantity,clear
 export const getCart = (store) => store.cart.cart;
 export const getTotalCartItems = (store) => store.cart.cart.reduce((total,item)=> item.quantity +  total,0);
 export const getTotalCartPrice = (store) => store.cart.cart.reduce((total,item)=> item.totalPrice +  total,0);
+export const getCartItemById = (id:string) => (store) => store.cart.cart.find(item => item.id == id);

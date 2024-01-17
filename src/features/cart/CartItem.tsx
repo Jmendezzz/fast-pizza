@@ -1,9 +1,6 @@
-import { useDispatch } from "react-redux";
-import Button from "../../ui/Button";
 import { formatCurrency } from "../../utils/helpers";
-import { deleteItem } from "./cartSlice";
+import DeleteItem from "./DeleteItem";
 function CartItem({ item }) {
-  const dispatch = useDispatch();
   const { id, name, quantity, totalPrice } = item;
 
   return (
@@ -13,7 +10,7 @@ function CartItem({ item }) {
       </p>
       <div className="flex justify-between items-center sm:gap-6">
         <p>{formatCurrency(totalPrice)}</p>
-        <Button onClick={()=> dispatch(deleteItem(id))} type="small">Delete</Button>
+        <DeleteItem id={id} />
       </div>
     </li>
   );
