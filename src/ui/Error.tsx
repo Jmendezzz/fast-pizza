@@ -4,7 +4,7 @@ import LinkButton from './LinkButton';
 function Error() {
   const error  = useRouteError();
   return (
-    <div>
+    <div className='flex h-screen items-center justify-center flex-col'>
       <h1>Something went wrong 😢</h1>
       <p>{error.data || error.message}</p>
       <LinkButton to='-1'>&larr; Go back</LinkButton>
