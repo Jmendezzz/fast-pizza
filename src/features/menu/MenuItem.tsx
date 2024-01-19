@@ -40,12 +40,12 @@ function MenuItem({ pizza }) {
           ) : (
             <p className="font-medium uppercase text-stone-500">Sold out</p>
           )}
-          <div className="space-x-2">
-            {isInCart && <DeleteItem id={id} />}
+          {isInCart && <DeleteItem id={id} />}
+          {!soldOut && !isInCart && (
             <Button type="small" onClick={addToCartHandler}>
               Add to Cart
             </Button>
-          </div>
+          )}
         </div>
       </div>
     </li>

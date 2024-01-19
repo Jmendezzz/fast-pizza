@@ -15,15 +15,19 @@ const cartSlice = createSlice({
             state.cart = state.cart.filter((item) => item.id !== action.payload)
         },
         increaseItemQuantity(state,action){
-            const item = state.cart.find((item) => item.id  === action.id);
+            const item = state.cart.find((item) => item.id  === action.payload);
             item.quantity++;
             item.totalPrice = item.quantity * item.unitPrice;
         },
         decreaseItemQuantity(state,action){
-            const item = state.cart.find((item) => item.id  === action.id);
+            const item = state.cart.find((item) => item.id  === action.payload);
             item.quantity--;
             item.totalPrice = item.quantity * item.unitPrice;
-       
+            if(item.quantity == 0){
+                cartSlice.caseReducers.deleteItem(state,action);
+                return;
+            }
+                   
         },
         clearCart(state){
             state.cart = [];
