@@ -4,8 +4,9 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import { getOrder } from "../../services/apiRestaurant";
-import { useLoaderData } from "react-router-dom";
+import { useFetcher, useLoaderData } from "react-router-dom";
 import OrderItem from "./OrderItem";
+import { useEffect } from "react";
 
 function Order() {
   const order = useLoaderData();
@@ -20,6 +21,16 @@ function Order() {
     cart,
   } = order;
 
+  const fetcher = useFetcher();
+  console.log(fetcher.data)
+
+  useEffect(() => {
+    if (!fetcher.data && fetcher.state == "idle") {
+      fetcher.load("/menu");
+    }
+  }, [fetcher]);
+  console.log(order.cart);
+
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
@@ -32,26 +43,46 @@ function Order() {
               Priority
             </span>
           )}
-          <span className="rounded-full bg-green-500 p-2 font-semibold  uppercase tracking-wide text-green-50">{status} order</span>
+          <span className="rounded-full bg-green-500 p-2 font-semibold  uppercase tracking-wide text-green-50">
+            {status} order
+          </span>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-5 rounded-sm bg-stone-200">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-sm bg-stone-200 px-6 py-5">
         <p className="font-medium">
           {deliveryIn >= 0
             ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
             : "Order should have arrived"}
         </p>
-        <p className="text-xs tetx-stone-500">(Estimated delivery: {formatDate(estimatedDelivery)})</p>
+        <p className="tetx-stone-500 text-xs">
+          (Estimated delivery: {formatDate(estimatedDelivery)})
+        </p>
       </div>
       <ul className="divide-y-2 border-b border-t">
-        {cart.map(item => <OrderItem key={item.id} item={item}/>)}
+        {cart.map((item) => (
+          <OrderItem
+            key={item.id}
+            isLoadingIngredients={fetcher.state === 'loading'}
+            ingredients={fetcher.data?.find(el => el.pizzaId === item.id).ingredients ?? []}
+
+            item={item}
+          />
+        ))}
       </ul>
 
-      <div className="space-y-2 bg-stone-200 px-6 py-5 rounded-sm">
-        <p className="text-sm font-medium text-stone-600">Price pizza: {formatCurrency(orderPrice)}</p>
-        {priority && <p className="text-sm font-medium text-stone-600">Price priority: {formatCurrency(priorityPrice)}</p>}
-        <p className="font-bold">To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
+      <div className="space-y-2 rounded-sm bg-stone-200 px-6 py-5">
+        <p className="text-sm font-medium text-stone-600">
+          Price pizza: {formatCurrency(orderPrice)}
+        </p>
+        {priority && (
+          <p className="text-sm font-medium text-stone-600">
+            Price priority: {formatCurrency(priorityPrice)}
+          </p>
+        )}
+        <p className="font-bold">
+          To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
+        </p>
       </div>
     </div>
   );

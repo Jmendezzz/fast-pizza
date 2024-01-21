@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearCart, getCart } from "../cart/cartSlice";
 import EmptyCart from "../cart/EmptyCart";
 import store from "../../store";
+import { fetchAddress } from "../user/userSlice";
+import { useState } from "react";
 
 
 // https://uibakery.io/regex-library/phone-number
@@ -14,9 +16,10 @@ const isValidPhone = (str: string) =>
   );
 
 function CreateOrder() {
-  // const [withPriority, setWithPriority] = useState(false);
-  const username = useSelector(store=> store.user.username);
-
+  const [withPriority, setWithPriority] = useState(false);
+  const {username,status: addressStatus, position, address} = useSelector(store=> store.user);
+  const isLoadingAddress = addressStatus == 'loading';
+  console.log(addressStatus, position, address )
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state == "submitting";
@@ -48,8 +51,12 @@ function CreateOrder() {
 
         <div className="mb-5 flex gap-2 flex-col sm:flex-row sm:items-center">
           <label  className="sm:basis-32">Address</label>
-          <div>
-            <input type="text" name="address" required className="input w-full" />
+          <div className="relative flex items-center">
+            <input type="text" name="address" disabled={isLoadingAddress} defaultValue={address} required className="input w-full" />
+            <span className="absolute right-[3px] z-10">
+              {!position.latitude && !position.longitude && <Button type="round" disabled={isLoadingAddress} onClick={(e)=>
+              {e.preventDefault(); dispatch(fetchAddress())}}>Get position</Button> }
+            </span>
           </div>
         </div>
 
@@ -59,8 +66,8 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority" className="font-medium">Want to yo give your order priority?</label>
         </div>
@@ -83,7 +90,7 @@ export async function action({ request }) {
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
-    priority: data.priority === "on",
+    priority: data.priority === "true",
   };
 
   const errors = {};
